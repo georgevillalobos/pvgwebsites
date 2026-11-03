@@ -125,7 +125,18 @@ details p{margin:8px 0 0;color:var(--muted)}
 .close p{opacity:.82;max-width:52ch}
 .close .btn{border-color:var(--on-ink);color:var(--on-ink)}
 .close .btn.cob{border-color:var(--cobalt);color:var(--on-cobalt)}
+.close .eyebrow{color:var(--cobalt)}
+.contact{display:grid;gap:12px;margin-top:22px}
+@media (min-width:640px){.contact{grid-template-columns:repeat(2,1fr)}}
+.chan{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:var(--on-ink);text-decoration:none;font:inherit;text-align:left;cursor:pointer;transition:background .25s var(--ease),transform .25s var(--ease)}
+.chan:hover{background:rgba(255,255,255,.14)} .chan:active{transform:scale(.98)}
+.chan .ico{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:var(--cobalt);color:var(--on-cobalt)}
+.chan .ico svg{width:22px;height:22px}
+.chan b{display:block;font:700 16px var(--body)} .chan small{display:block;font-size:14px;opacity:.78;margin-top:2px;word-break:break-all}
+.chan.copy.done .ico{background:#2e9e5b;color:#fff}
+.replyin{font-size:14px;opacity:.7;margin:16px 0 0}
 footer{padding-block:10px 50px;font-size:14px;color:var(--muted)}
+footer a{color:inherit}
 .reveal{transition:transform .8s var(--ease)} .reveal.below{transform:translateY(26px)}
 @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 .hero > *{animation:fade .8s var(--ease) both}.hero > *:nth-child(2){animation-delay:.08s}.hero > *:nth-child(3){animation-delay:.16s}.hero > *:nth-child(4){animation-delay:.24s}.hero > *:nth-child(5){animation-delay:.32s}
@@ -137,7 +148,7 @@ footer{padding-block:10px 50px;font-size:14px;color:var(--muted)}
 <header class="bar"><div class="wrap">
   <a class="logo" href="#top">PVG <span>Production</span></a>
   <div class="right">
-    <nav class="nav"><a href="#work" data-t="navWork"></a><a href="#prices" data-t="navPrices"></a><a href="#how" data-t="navHow"></a></nav>
+    <nav class="nav"><a href="#work" data-t="navWork"></a><a href="#prices" data-t="navPrices"></a><a href="#how" data-t="navHow"></a><a href="#contact" data-t="navContact"></a></nav>
     <div class="lang" id="lang" role="group" aria-label="Language"><span class="lang-ink" id="lang-ink"></span></div>
   </div>
 </div></header>
@@ -215,21 +226,40 @@ footer{padding-block:10px 50px;font-size:14px;color:var(--muted)}
     <div id="faq"></div>
   </section>
 
-  <div class="close reveal">
+  <section class="close reveal" id="contact">
+    <p class="eyebrow" data-t="contactK"></p>
     <h2 data-t="closeH"></h2>
     <p data-t="closeP"></p>
-    <div class="ctas"><a class="btn cob" href="#work" data-t="closeBtn"></a></div>
-  </div>
-  <footer data-t="footer"></footer>
+    <div class="contact">
+      <a class="chan" id="mailBtn" href="mailto:hello@pvgwebsites.com">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 8l9 6 9-6"/></svg></span>
+        <span><b data-t="chEmail"></b><small>hello@pvgwebsites.com</small></span>
+      </a>
+      <a class="chan" href="https://instagram.com/pvg.websites" target="_blank" rel="noopener">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span>
+        <span><b data-t="chIG"></b><small>@pvg.websites</small></span>
+      </a>
+      <a class="chan" href="https://facebook.com/pvgwebsites" target="_blank" rel="noopener">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7h2.4l.4-3h-2.8V9.2c0-.9.3-1.5 1.5-1.5h1.4V5.1c-.3 0-1.1-.1-2.1-.1-2.1 0-3.6 1.3-3.6 3.7V11H8.3v3h2.4v7z"/></svg></span>
+        <span><b data-t="chFB"></b><small>facebook.com/pvgwebsites</small></span>
+      </a>
+      <button class="chan copy" type="button" id="copyBtn">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></span>
+        <span><b id="copyLbl" data-t="chCopy"></b><small data-t="chCopyS"></small></span>
+      </button>
+    </div>
+    <p class="replyin" data-t="replyIn"></p>
+  </section>
+  <footer><span data-t="footer"></span> · <a href="mailto:hello@pvgwebsites.com">hello@pvgwebsites.com</a> · <a href="https://instagram.com/pvg.websites" target="_blank" rel="noopener">Instagram</a> · <a href="https://facebook.com/pvgwebsites" target="_blank" rel="noopener">Facebook</a></footer>
 </main>
 
 <script>
 const T = {
-  en:{label:"EN",navWork:"Work",navPrices:"Prices",navHow:"How it works",
+  en:{label:"EN",navWork:"Work",navPrices:"Prices",navHow:"How it works",navContact:"Contact",
     eyebrow:"Websites for local businesses · Richmond, CA",
     h1:"Your Instagram is the storefront. <mark>Give it a front door.</mark>",
     sub:"A one-page website that takes orders, answers the same questions you get in DMs, and works in English and your customers' language. I build a free sample with your real menu before you pay anything.",
-    ctaWork:"See the work",ctaPrices:"What it costs",
+    ctaWork:"See the work",ctaPrices:"What it costs",mailSubj:"Free website sample for my business",
     p1:"Ready in about a week",p2:"Any language",p3:"Made for phones",p4:"Your domain, in your name",
     workK:"Sample work",workH:"Two businesses, two different jobs",workP:"Both are demo businesses I built to show what's possible. Open them on your phone and try them: tap things, switch the language, build an order.",
     c1tag:"Home bakery that sells on Instagram",c1p:"For a baker who takes orders by DM. Customers pick a real cake design, size and flavor, and the site writes the order message for them.",
@@ -250,9 +280,9 @@ const T = {
     steps:[["Free sample","Send me your Instagram or menu. I build a sample with your real items."],["Two rounds of changes","Tell me what to change. Send everything together each round."],["Go live","We connect your domain and the site goes live. You get your review card."],["Stay updated","Text me new hours, prices or items. The monthly plan covers it."]],
     faqK:"Questions",faqH:"Before you ask",
     faq:[["Do I stop using Instagram?","No. The site links to your Instagram and makes it easier to order from it. Put the site in your bio."],["What if I don't like the sample?","Then you don't pay anything. The sample is free."],["Who owns the website?","You do. The domain is registered in your name."],["Can customers pay online?","Orders come to you by text and customers pay you the way they already do. Online payments through Square or Clover can be added; that's quoted separately."],["Which languages?","Any. English plus the language your customers speak is included. Have someone who speaks it read it before launch."]],
-    closeH:"Want to see yours?",closeP:"Reply to the message this link came in, with your Instagram or menu. I'll send a free sample site within a few days.",closeBtn:"See the work again",
+    contactK:"Contact",closeH:"Want to see yours?",closeP:"Send me your Instagram or your menu, by email or by message. I'll send a free sample site within a few days. No cost, nothing to sign.",chEmail:"Email me",chIG:"Message me on Instagram",chFB:"Message me on Facebook",chCopy:"Copy the email address",chCopyS:"Tap to copy",chCopied:"Copied",replyIn:"Reply within one business day. English or Spanish.",
     footer:"PVG Production · Richmond, California"},
-  es:{label:"ES",navWork:"Trabajo",navPrices:"Precios",navHow:"Cómo funciona",
+  es:{label:"ES",navContact:"Contacto",mailSubj:"Muestra gratis de sitio web para mi negocio",navWork:"Trabajo",navPrices:"Precios",navHow:"Cómo funciona",
     eyebrow:"Sitios web para negocios locales · Richmond, CA",
     h1:"Su Instagram es la tienda. <mark>Póngale una puerta.</mark>",
     sub:"Un sitio de una página que recibe pedidos, contesta las mismas preguntas que le llegan por mensaje y funciona en inglés y en el idioma de sus clientes. Le hago una muestra gratis con su menú real antes de que pague algo.",
@@ -277,7 +307,7 @@ const T = {
     steps:[["Muestra gratis","Mándeme su Instagram o menú. Le hago una muestra con sus productos reales."],["Dos rondas de cambios","Dígame qué cambiar. Mande todo junto en cada ronda."],["Publicar","Conectamos su dominio y el sitio queda en línea. Recibe su tarjeta para reseñas."],["Mantenerlo al día","Mándeme por texto horarios, precios o productos nuevos. El plan mensual lo cubre."]],
     faqK:"Preguntas",faqH:"Antes de que pregunte",
     faq:[["¿Dejo de usar Instagram?","No. El sitio enlaza su Instagram y hace más fácil ordenar. Ponga el sitio en su bio."],["¿Y si no me gusta la muestra?","Entonces no paga nada. La muestra es gratis."],["¿De quién es el sitio?","Suyo. El dominio se registra a su nombre."],["¿Pueden pagar en línea?","Los pedidos le llegan por texto y sus clientes le pagan como ya lo hacen. Se pueden agregar pagos en línea con Square o Clover; eso se cotiza aparte."],["¿Qué idiomas?","Cualquiera. Está incluido el inglés y el idioma de sus clientes. Que alguien que lo hable lo revise antes de publicar."]],
-    closeH:"¿Quiere ver el suyo?",closeP:"Conteste el mensaje en el que le llegó este enlace con su Instagram o menú. Le mando una muestra gratis en unos días.",closeBtn:"Ver el trabajo otra vez",
+    contactK:"Contacto",closeH:"¿Quiere ver el suyo?",closeP:"Mándeme su Instagram o su menú, por correo o por mensaje. Le mando una muestra gratis en unos días. Sin costo y sin firmar nada.",chEmail:"Escríbame por correo",chIG:"Mándeme mensaje en Instagram",chFB:"Mándeme mensaje en Facebook",chCopy:"Copiar el correo",chCopyS:"Toque para copiar",chCopied:"Copiado",replyIn:"Respondo en un día hábil. En español o inglés.",
     footer:"PVG Production · Richmond, California"}
 };
 const $ = id => document.getElementById(id);
@@ -308,6 +338,16 @@ if ("IntersectionObserver" in window){
   document.querySelectorAll(".reveal").forEach(el => { if (el.getBoundingClientRect().top > innerHeight){ el.classList.add("below"); io.observe(el); } });
 }
 addEventListener("resize", renderLang);
+$("copyBtn").addEventListener("click", async () => {
+  const addr = "hello@pvgwebsites.com", btn = $("copyBtn"), lbl = $("copyLbl");
+  try { await navigator.clipboard.writeText(addr); } catch (e) {
+    const r = document.createRange(); r.selectNodeContents(btn.querySelector("small")); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+    try { document.execCommand("copy"); } catch (e2) {}
+  }
+  btn.classList.add("done"); lbl.textContent = L().chCopied;
+  setTimeout(() => { btn.classList.remove("done"); lbl.textContent = L().chCopy; }, 1800);
+});
+$("mailBtn").addEventListener("click", () => { $("mailBtn").href = "mailto:hello@pvgwebsites.com?subject=" + encodeURIComponent(L().mailSubj); });
 render();
 </script>
 </body>
