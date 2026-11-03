@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Taquería Tres Soles</title>
+<meta name="description" content="Tacos al pastor, birria and aguas frescas on Macdonald Ave, Richmond CA. Pickup and delivery. Open daily.">
+<meta property="og:title" content="Taquería Tres Soles · Richmond, CA">
+<meta property="og:description" content="Tacos al pastor, birria and aguas frescas. Pickup and delivery, open daily.">
+<meta property="og:image" content="img/birria.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}
+
+/* Layout: a taquería menu board on a phone. Promo strip, photo hero with live open/closed chip,
+   pickup/delivery switch, photo banners between sections, tabbed menu with add-to-order, a floating order bar. */
+:root{
+  /* palette: deep nopal teal + its complement, chile coral, with a marigold highlight */
+  --bg:#FAF7F2; --surface:#FFFFFF; --fg:#142322; --muted:#5E6A68; --line:#E5DFD3; --tint:#E3F0EC;
+  --board:#0E4744; --on-board:#FAF7F2; --coral:#C46F5C; --on-coral:#FFFFFF; --gold:#F3B33D; --on-gold:#2A1A00;
+  --ok:#1E7B46; --closed:#B23A2A;
+  --display:"Anton","Impact","Arial Narrow",sans-serif;
+  --body:"Work Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0B1514; --surface:#12201F; --fg:#EEF1EC; --muted:#9BA8A5; --line:#24363A; --tint:#173230;
+  --board:#0A3836; --on-board:#F4F1EA; --coral:#D98C78; --on-coral:#1A0A05; --gold:#F6C04F; --on-gold:#2A1A00;
+  --ok:#4CC27F; --closed:#EE7A63; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B1514; --surface:#12201F; --fg:#EEF1EC; --muted:#9BA8A5; --line:#24363A; --tint:#173230;
+  --board:#0A3836; --on-board:#F4F1EA; --coral:#D98C78; --on-coral:#1A0A05; --gold:#F6C04F; --on-gold:#2A1A00;
+  --ok:#4CC27F; --closed:#EE7A63; color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55;overflow-x:hidden}
+.wrap{max-width:780px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:6px}
+img{display:block;max-width:100%}
+button{font-family:inherit}
+
+/* promo strip */
+.promo{background:color-mix(in srgb,var(--coral) 16%,var(--bg));color:var(--fg);overflow:hidden;border-bottom:1px solid color-mix(in srgb,var(--coral) 25%,var(--bg))}
+.promo .wrap{height:36px;position:relative}
+.promo p{position:absolute;inset:0;margin:0;display:flex;align-items:center;justify-content:center;gap:8px;font:600 13px var(--body);letter-spacing:.04em;text-align:center;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));transition:transform .5s var(--ease),opacity .5s}
+.promo p.out{transform:translateY(-100%);opacity:0}
+.promo p.in{transform:translateY(100%);opacity:0}
+
+/* sticky bar */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 84%,transparent);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .3s}
+.bar.scrolled{border-bottom-color:var(--line)}
+.bar .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:10px}
+.mark{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:20px;letter-spacing:.04em;text-transform:uppercase;text-decoration:none}
+.mark svg{width:26px;height:26px}
+.bar-right{display:flex;align-items:center;gap:8px}
+.bar-call{opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .3s,transform .3s var(--ease);
+  font:600 13px var(--body);text-decoration:none;padding:7px 12px;border-radius:999px;background:var(--gold);color:var(--on-gold)}
+.bar.scrolled .bar-call{opacity:1;transform:none;pointer-events:auto}
+.lang{position:relative;display:flex;border:2px solid var(--fg);border-radius:999px;overflow:hidden}
+.lang-ink{position:absolute;top:0;bottom:0;left:0;background:var(--fg);transition:transform .35s var(--ease),width .35s var(--ease)}
+.lang button{position:relative;font:600 13px var(--body);letter-spacing:.06em;padding:6px 12px;border:0;background:transparent;color:var(--fg);cursor:pointer;transition:color .35s}
+.lang button[aria-pressed="true"]{color:var(--bg)}
+[data-t],.dish b,.dish p{transition:opacity .18s}
+body.swapping [data-t],body.swapping .dish b,body.swapping .dish p{opacity:0}
+
+/* hero */
+.hero{position:relative;border-radius:26px;overflow:hidden;background:var(--board);color:var(--on-board);margin-top:6px;isolation:isolate;min-height:520px;display:flex;align-items:flex-end}
+.hero-img{position:absolute;inset:0;z-index:-2}
+.hero-img img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;animation:settle 1.8s var(--ease) both}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(6,24,23,.05) 0%,rgba(6,24,23,.35) 38%,rgba(6,24,23,.93) 78%)}
+.hero-in{padding:24px 22px 22px;width:100%}
+.sun{position:absolute;right:-36px;top:-36px;width:150px;height:150px;animation:spin 80s linear infinite}
+.hero h1{font-family:var(--display);font-weight:400;font-size:clamp(56px,16vw,104px);line-height:.9;margin:0;text-transform:uppercase;letter-spacing:.01em}
+.hero h1 .w{display:block;clip-path:inset(-40% -60% 0 -60%);white-space:nowrap}
+.hero h1 .w span{display:block;animation:rise .9s var(--ease) both}
+.hero h1 .w:nth-child(2) span{animation-delay:.12s;color:var(--gold)}
+.tag{margin:12px 0 0;font-size:17px;max-width:32ch;animation:fade .8s .35s both}
+.chip{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.16);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font:500 14px var(--body);animation:fade .8s .45s both}
+.dot{position:relative;width:10px;height:10px;border-radius:50%;background:#53D98C}
+.dot::after{content:"";position:absolute;inset:0;border-radius:50%;background:inherit;animation:ping 1.8s ease-out infinite}
+.chip.closed .dot{background:#FF8A70} .chip.closed .dot::after{animation:none}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px;animation:fade .8s .55s both}
+.btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;text-align:center;border:0;cursor:pointer;
+  padding:12px 6px;border-radius:14px;background:var(--on-board);color:#0E4744;font:600 14px var(--body);min-height:64px;transition:transform .2s var(--ease),box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--gold);color:var(--on-gold)}
+.btn svg{width:22px;height:22px}
+
+/* order switch */
+.order{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:16px}
+.seg{position:relative;display:grid;grid-template-columns:1fr 1fr;background:var(--tint);border-radius:999px;padding:4px}
+.seg::before{content:"";position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:999px;background:var(--board);transition:transform .35s var(--ease)}
+.seg.del::before{transform:translateX(100%)}
+.seg button{position:relative;border:0;background:none;padding:10px;font:600 14px var(--body);color:var(--fg);cursor:pointer;border-radius:999px;transition:color .3s}
+.seg button[aria-selected="true"]{color:var(--on-board)}
+.opane{padding-top:14px}
+.opane h3{margin:0;font:700 18px var(--body)}
+.opane p{margin:4px 0 0;color:var(--muted);font-size:15px}
+.apps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.app{display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 6px;border-radius:14px;border:1.5px solid var(--line);text-decoration:none;font:600 14px var(--body);transition:border-color .2s,transform .2s var(--ease)}
+.app small{font:500 12px var(--body);color:var(--muted)}
+.app:hover{border-color:var(--fg);transform:translateY(-2px)}
+.eta{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font:600 13px var(--body);color:var(--ok)}
+
+/* ticker */
+.ticker{margin-top:22px;overflow:hidden;border-block:2px solid var(--fg);padding-block:8px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.ticker-track{display:flex;width:max-content;animation:slide 40s linear infinite;font-family:var(--display);font-size:24px;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap}
+.ticker-track span{display:inline-flex;align-items:center;gap:26px;padding-right:26px}
+.ticker-track span::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--coral)}
+.ticker.top{margin-top:0;border-top:0;border-bottom:0;background:var(--board);color:var(--gold);padding-block:9px;-webkit-mask-image:none;mask-image:none}
+.ticker.top .ticker-track{font-size:22px}
+.ticker.top .ticker-track span::after{background:var(--on-board)}
+
+/* photo banners */
+.banner{position:relative;display:block;margin-top:34px;border-radius:24px;overflow:hidden;min-height:220px;color:#fff;text-decoration:none;isolation:isolate}
+.banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transform:scale(1.04);transition:transform .9s var(--ease)}
+.banner:hover img{transform:scale(1.09)}
+.banner::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(8,20,19,.86) 0%,rgba(8,20,19,.55) 55%,rgba(8,20,19,.1) 100%)}
+.banner .b-in{padding:24px 22px;max-width:30ch}
+.banner .b-eyebrow{font:700 12px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.banner h3{font-family:var(--display);font-weight:400;font-size:clamp(36px,10vw,54px);line-height:.95;text-transform:uppercase;margin:6px 0 8px}
+.banner p{margin:0;font-size:15px;opacity:.92}
+.banner .price-tag{display:inline-block;margin-top:12px;padding:6px 12px;border-radius:999px;background:var(--gold);color:var(--on-gold);font:700 14px var(--body)}
+.banner.night::before{background:linear-gradient(0deg,rgba(4,10,12,.9) 0%,rgba(4,10,12,.3) 70%)}
+.banner.night{display:flex;align-items:flex-end}
+
+section{padding-block:42px 6px}
+h2{font-family:var(--display);font-weight:400;font-size:clamp(34px,9vw,48px);line-height:1;letter-spacing:.02em;text-transform:uppercase;margin:0 0 14px;text-wrap:balance}
+.kicker{font:700 12px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--coral);margin:0 0 6px}
+.reveal{transition:transform .8s var(--ease)}
+.reveal.below{transform:translateY(28px)}
+
+/* menu */
+.tabs{position:relative;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;border-bottom:2px solid var(--line);margin-bottom:6px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;font:600 15px var(--body);letter-spacing:.02em;padding:10px 12px;border:0;background:none;color:var(--muted);cursor:pointer;transition:color .25s}
+.tab[aria-selected="true"]{color:var(--fg)}
+.tab-ink{position:absolute;bottom:-2px;left:0;height:3px;background:var(--coral);border-radius:3px;transition:transform .35s var(--ease),width .35s var(--ease)}
+.sub{font:700 12px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:14px 0 2px}
+.panel{display:grid;gap:12px;padding-top:12px}
+.panel.enter .dish{animation:dishin .45s var(--ease) both}
+.panel.enter .dish:nth-child(2){animation-delay:.05s}.panel.enter .dish:nth-child(3){animation-delay:.1s}.panel.enter .dish:nth-child(4){animation-delay:.15s}.panel.enter .dish:nth-child(n+5){animation-delay:.2s}
+.dish{display:grid;grid-template-columns:104px 1fr;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:10px;transition:transform .25s var(--ease),box-shadow .25s}
+.dish:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.08)}
+.thumb{width:104px;height:104px;border-radius:12px;overflow:hidden;background:var(--board)}
+.thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.dish:hover .thumb img{transform:scale(1.08)}
+.dish-body{min-width:0}
+.dish-top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.dish b{font-weight:600}
+.price{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.dish p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.dish-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+.badges{display:flex;gap:6px;flex-wrap:wrap}
+.badge{font:700 11px var(--body);letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:color-mix(in srgb,var(--gold) 28%,transparent)}
+.badge.hot{background:color-mix(in srgb,var(--coral) 22%,transparent)}
+.badge.new{background:var(--tint)}
+.add{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:999px;padding:7px 12px;background:var(--board);color:var(--on-board);font:600 13px var(--body);cursor:pointer;transition:transform .2s var(--ease),background .2s}
+.add:active{transform:scale(.94)}
+.add.added{background:var(--ok)}
+.note{font-size:13px;color:var(--muted);margin-top:12px}
+
+/* hours, visit */
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+td{padding:10px 0;border-bottom:1px solid var(--line)}
+td:last-child{text-align:right;font-family:var(--mono)}
+tr.today td{font-weight:700}
+tr.today td:first-child::after{content:attr(data-today);margin-left:8px;font:700 11px var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--coral)}
+.visit{display:grid;gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px}
+.mapart{height:140px;border-radius:12px;margin-bottom:14px;background:var(--board);overflow:hidden}
+.mapart svg{width:100%;height:100%}
+.addr{font-size:18px;font-weight:600;margin:0}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:999px;border:2px solid var(--fg);text-decoration:none;font:600 14px var(--body);background:transparent;color:var(--fg);cursor:pointer;transition:transform .2s var(--ease)}
+.pill:active{transform:scale(.97)}
+.pill.fill{background:var(--fg);color:var(--bg)}
+.phone{font-family:var(--mono);font-size:18px;user-select:all}
+
+.review{position:relative;overflow:hidden;background:var(--board);color:var(--on-board);border-radius:24px;padding:26px 22px}
+.review h2{color:var(--on-board)}
+.review p{margin:0 0 16px;max-width:42ch}
+.stars{display:flex;gap:6px;margin-bottom:8px}
+.stars svg{width:28px;height:28px;fill:var(--gold)}
+.review.seen .stars svg{animation:pop .5s var(--ease) both}
+.review.seen .stars svg:nth-child(2){animation-delay:.08s}.review.seen .stars svg:nth-child(3){animation-delay:.16s}
+.review.seen .stars svg:nth-child(4){animation-delay:.24s}.review.seen .stars svg:nth-child(5){animation-delay:.32s}
+.review .pill{border-color:var(--gold);background:var(--gold);color:var(--on-gold)}
+
+footer{padding-block:36px 120px;font-size:13px;color:var(--muted)}
+footer .demo{display:inline-block;margin-top:6px;padding:3px 8px;border:1px solid var(--line);border-radius:6px}
+footer .credits{margin-top:10px;font-size:12px;max-width:60ch}
+
+/* floating order bar + sheet */
+.cartbar{position:fixed;left:0;right:0;bottom:0;z-index:25;padding:0 max(16px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+  transform:translateY(130%);transition:transform .45s var(--ease);pointer-events:none}
+.cartbar.show{transform:none}
+.cartbar button{pointer-events:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;max-width:748px;margin:0 auto;border:0;cursor:pointer;
+  padding:14px 18px;border-radius:18px;background:var(--board);color:var(--on-board);font:700 16px var(--body);box-shadow:0 12px 30px rgba(0,0,0,.25)}
+.cartbar .count{display:inline-grid;place-items:center;min-width:26px;height:26px;border-radius:999px;background:rgba(0,0,0,.18);font-size:13px;margin-right:8px}
+.cartbar.bump button{animation:bump .35s var(--ease)}
+.sheet-bg{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .3s}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-height:86%;overflow:auto;background:var(--bg);border-radius:24px 24px 0 0;
+  transform:translateY(105%);transition:transform .45s var(--ease);padding:10px 0 calc(20px + env(safe-area-inset-bottom,0px))}
+.sheet.open{transform:none}.sheet.open + .sheet-bg,.sheet-bg.open{opacity:1;pointer-events:auto}
+.grab{width:44px;height:5px;border-radius:5px;background:var(--line);margin:0 auto 10px}
+.sheet h2{font-size:34px}
+.line{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.qty{display:flex;align-items:center;gap:6px}
+.qty button{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);font:700 16px var(--body);cursor:pointer}
+.tot{display:flex;justify-content:space-between;font:700 18px var(--body);padding-top:12px}
+.field{display:grid;gap:4px;margin-top:14px;font:600 13px var(--body)}
+.field input{font:500 16px var(--body);padding:10px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--fg)}
+.ordertext{margin-top:12px;padding:12px;border-radius:12px;background:var(--tint);font:500 13px var(--mono);white-space:pre-wrap}
+.sheet .row .pill.fill{background:var(--board);border-color:var(--board);color:var(--on-board)}
+.small{font-size:12px;color:var(--muted);margin-top:10px}
+
+@keyframes rise{from{transform:translateY(105%)}to{transform:none}}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes settle{from{transform:scale(1.14)}to{transform:scale(1.04)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes ping{0%{transform:scale(1);opacity:.7}100%{transform:scale(2.6);opacity:0}}
+@keyframes slide{to{transform:translateX(-50%)}}
+@keyframes dishin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{transform:scale(.4)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.04)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.reveal.below{transform:none}}
+</style>
+</head>
+<body>
+
+<div class="ticker top" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
+<div class="promo" aria-live="polite"><div class="wrap" id="promo"></div></div>
+
+<header class="bar" id="bar">
+  <div class="wrap">
+    <a class="mark" href="#top"><svg viewBox="0 0 32 32" aria-hidden="true"><g fill="var(--gold)"><circle cx="16" cy="16" r="6.5"/><g id="ray"><rect x="15" y="1" width="2" height="6" rx="1"/></g><use href="#ray" transform="rotate(45 16 16)"/><use href="#ray" transform="rotate(90 16 16)"/><use href="#ray" transform="rotate(135 16 16)"/><use href="#ray" transform="rotate(180 16 16)"/><use href="#ray" transform="rotate(225 16 16)"/><use href="#ray" transform="rotate(270 16 16)"/><use href="#ray" transform="rotate(315 16 16)"/></g></svg>Tres Soles</a>
+    <div class="bar-right">
+      <a class="bar-call" id="bar-call" href="#order" data-t="order"></a>
+      <div class="lang" id="lang" role="group" aria-label="Language"><span class="lang-ink" id="lang-ink"></span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+  <div class="hero" id="hero">
+    <div class="hero-img"><img src="img/birria.jpg" alt=""></div>
+    <svg class="sun" viewBox="0 0 200 200" aria-hidden="true"><g fill="var(--gold)"><circle cx="100" cy="100" r="34"/><g id="r2"><path d="M96 8h8l-2 44h-4z"/></g>
+      <use href="#r2" transform="rotate(30 100 100)"/><use href="#r2" transform="rotate(60 100 100)"/><use href="#r2" transform="rotate(90 100 100)"/><use href="#r2" transform="rotate(120 100 100)"/><use href="#r2" transform="rotate(150 100 100)"/><use href="#r2" transform="rotate(180 100 100)"/><use href="#r2" transform="rotate(210 100 100)"/><use href="#r2" transform="rotate(240 100 100)"/><use href="#r2" transform="rotate(270 100 100)"/><use href="#r2" transform="rotate(300 100 100)"/><use href="#r2" transform="rotate(330 100 100)"/></g></svg>
+    <div class="hero-in">
+      <h1><span class="w"><span>Taquería</span></span><span class="w"><span>Tres&nbsp;Soles</span></span></h1>
+      <p class="tag" data-t="tagline"></p>
+      <div class="chip" id="status"><span class="dot"></span><span id="status-text"></span></div>
+      <div class="actions">
+        <a class="btn primary" href="#order"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg><span data-t="order"></span></a>
+        <a class="btn" id="call" href="tel:+15105550142"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span data-t="call"></span></a>
+        <a class="btn" id="directions" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><span data-t="directions"></span></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="order" id="order">
+    <div class="seg" id="seg" role="tablist">
+      <button id="seg-pickup" type="button" role="tab" aria-selected="true" data-t="pickup"></button>
+      <button id="seg-delivery" type="button" role="tab" aria-selected="false" data-t="delivery"></button>
+    </div>
+    <div class="opane" id="pane-pickup">
+      <h3 data-t="pickupTitle"></h3>
+      <p data-t="pickupBody"></p>
+      <div class="row"><a class="pill fill" href="#menu" data-t="startOrder"></a><a class="pill" id="call2" href="tel:+15105550142" data-t="callOrder"></a></div>
+      <span class="eta"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-t="eta"></span></span>
+    </div>
+    <div class="opane" id="pane-delivery" hidden>
+      <h3 data-t="deliveryTitle"></h3>
+      <p data-t="deliveryBody"></p>
+      <div class="apps" id="apps"></div>
+    </div>
+  </div>
+
+  <a class="banner reveal" href="#menu" id="b-tuesday">
+    <img src="img/beer.jpg" alt="" loading="lazy">
+    <div class="b-in"><span class="b-eyebrow" data-t="b1eye"></span><h3 data-t="b1title"></h3><p data-t="b1body"></p><span class="price-tag" data-t="b1price"></span></div>
+  </a>
+
+  <section id="menu" class="reveal">
+    <p class="kicker" data-t="menuKicker"></p>
+    <h2 data-t="menuTitle"></h2>
+    <div class="tabs" role="tablist" id="tabs"><span class="tab-ink" id="ink"></span></div>
+    <div class="panel" id="panel" role="tabpanel"></div>
+    <p class="note" data-t="menuNote"></p>
+  </section>
+
+  <a class="banner reveal" href="#order" id="b-delivery">
+    <img src="img/takeout.jpg" alt="" loading="lazy" style="object-position:50% 60%">
+    <div class="b-in"><span class="b-eyebrow" data-t="b2eye"></span><h3 data-t="b2title"></h3><p data-t="b2body"></p></div>
+  </a>
+
+  <section class="reveal">
+    <p class="kicker" data-t="hoursKicker"></p>
+    <h2 data-t="hoursTitle"></h2>
+    <table id="hours"></table>
+  </section>
+
+  <a class="banner night reveal" href="#hours">
+    <img src="img/neon.jpg" alt="" loading="lazy">
+    <div class="b-in"><span class="b-eyebrow" data-t="b3eye"></span><h3 data-t="b3title"></h3><p data-t="b3body"></p></div>
+  </a>
+
+  <section class="visit reveal">
+    <p class="kicker" data-t="visitKicker"></p>
+    <h2 data-t="visitTitle"></h2>
+    <div class="card">
+      <div class="mapart" aria-hidden="true">
+        <svg viewBox="0 0 400 140" preserveAspectRatio="xMidYMid slice"><rect width="400" height="140" fill="var(--board)"/>
+          <g stroke="var(--on-board)" stroke-opacity=".18" stroke-width="2" fill="none"><path d="M0 40h400M0 98h400M60 0v140M150 0v140M245 0v140M330 0v140"/></g>
+          <path d="M0 70h400" stroke="var(--gold)" stroke-width="7"/><text x="16" y="62" fill="var(--on-board)" font-family="Work Sans,sans-serif" font-size="12" font-weight="600" letter-spacing="2">MACDONALD AVE</text>
+          <g transform="translate(200 70)"><circle r="16" fill="var(--coral)"/><circle r="6" fill="#fff"/></g></svg>
+      </div>
+      <p class="addr" id="addr"></p>
+      <p style="margin:6px 0 0;color:var(--muted)" data-t="parking"></p>
+      <div class="row"><a class="pill fill" id="maps" target="_blank" rel="noopener" data-t="openMaps"></a></div>
+    </div>
+    <div class="card">
+      <p style="margin:0;color:var(--muted)" data-t="phoneLabel"></p>
+      <p class="phone" id="phone-text" style="margin:4px 0 0"></p>
+      <div class="row"><button class="pill" id="copy" type="button" data-t="copy"></button></div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <div class="review" id="review">
+      <div class="stars" aria-hidden="true"></div>
+      <h2 data-t="reviewTitle"></h2>
+      <p data-t="reviewBody"></p>
+      <a class="pill" id="review-link" target="_blank" rel="noopener" data-t="reviewBtn"></a>
+    </div>
+  </section>
+
+  <footer>
+    <div data-t="footer"></div>
+    <span class="demo" data-t="demo"></span>
+    <p class="credits" data-t="credits"></p>
+  </footer>
+</main>
+
+<div class="cartbar" id="cartbar"><button type="button" id="cart-open"><span><span class="count" id="cart-count">0</span><span data-t="viewOrder"></span></span><span class="price" id="cart-total">$0.00</span></button></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+  <div class="wrap">
+    <div class="grab"></div>
+    <p class="kicker" data-t="pickup"></p>
+    <h2 id="sheet-title" data-t="yourOrder"></h2>
+    <div id="lines"></div>
+    <div class="tot"><span data-t="total"></span><span class="price" id="sheet-total"></span></div>
+    <label class="field" for="o-name"><span data-t="nameLabel"></span><input id="o-name" autocomplete="name"></label>
+    <label class="field" for="o-time"><span data-t="timeLabel"></span><input id="o-time" type="time"></label>
+    <div class="ordertext" id="ordertext"></div>
+    <div class="row">
+      <a class="pill fill" id="sms" data-t="textOrder"></a>
+      <button class="pill" id="copy-order" type="button" data-t="copyOrder"></button>
+      <button class="pill" id="sheet-close" type="button" data-t="keepBrowsing"></button>
+    </div>
+    <p class="small" data-t="orderSmall"></p>
+  </div>
+</div>
+<div class="sheet-bg" id="sheet-bg"></div>
+
+<script>
+/* ---- Edit this block for each business ---- */
+const BIZ = {
+  name: "Taquería Tres Soles",
+  phone: "+15105550142", phoneText: "(510) 555-0142",
+  address: "Macdonald Ave, Richmond, CA", city: "Richmond", region: "CA",
+  mapsQuery: "Macdonald Ave, Richmond, CA",
+  reviewUrl: "https://www.google.com/maps",                    // their Google review link
+  delivery: [                                                  // their store links on each app
+    { name:"DoorDash", url:"https://www.doordash.com/" },
+    { name:"Uber Eats", url:"https://www.ubereats.com/" },
+    { name:"Grubhub", url:"https://www.grubhub.com/" } ],
+  tz: "America/Los_Angeles",
+  hours: { 0:[9,18], 1:[9,21], 2:[9,21], 3:[9,21], 4:[9,21], 5:[9,22], 6:[9,22] },   // 0 = Sunday; [open, close] 24h; null = closed
+  menu: [
+    { g:{en:"Tacos",es:"Tacos"}, items:[
+      { id:"pastor", img:"img/ai_pastor.jpg", n:{en:"Al pastor",es:"Al pastor"}, d:{en:"Pork shaved off the trompo, pineapple, onion, cilantro",es:"Cerdo del trompo, piña, cebolla, cilantro"}, p:3.75, b:["fav"] },
+      { id:"asada", img:"img/asada.jpg", n:{en:"Carne asada",es:"Carne asada"}, d:{en:"Grilled steak, onion, cilantro, salsa verde",es:"Res asada, cebolla, cilantro, salsa verde"}, p:4.00 },
+      { id:"birria", img:"img/ai_birria.jpg", n:{en:"Birria (3) with consomé",es:"Birria (3) con consomé"}, d:{en:"Slow-braised beef, cheese, griddled red, broth for dipping",es:"Res guisada, queso, dorada en la plancha, consomé para remojar"}, p:13.50, b:["hot","fav"] } ]},
+    { g:{en:"Burritos & plates",es:"Burritos y platillos"}, items:[
+      { id:"super", img:"img/burrito1.jpg", n:{en:"Super burrito",es:"Super burrito"}, d:{en:"Your meat, rice, beans, cheese, guacamole, sour cream",es:"Su carne, arroz, frijoles, queso, guacamole, crema"}, p:13.00 },
+      { id:"breakfast", img:"img/burrito2.jpg", n:{en:"Breakfast burrito",es:"Burrito de desayuno"}, d:{en:"Eggs, potatoes, cheese, salsa roja · until 11am",es:"Huevo, papa, queso, salsa roja · hasta las 11am"}, p:10.50, b:["new"] },
+      { id:"verde", img:"img/ai_verde.jpg", n:{en:"Chile verde plate",es:"Platillo de chile verde"}, d:{en:"Pork in tomatillo chile sauce, rice, beans, tortillas",es:"Cerdo en salsa verde, arroz, frijoles, tortillas"}, p:16.50, b:["hot"] } ]},
+    { g:{en:"Drinks",es:"Bebidas"}, items:[
+      { id:"horchata", sub:"aguas", img:"img/ai_horchata.jpg", n:{en:"Horchata",es:"Horchata"}, d:{en:"Rice, cinnamon, vanilla · 16 / 32 oz",es:"Arroz, canela, vainilla · 16 / 32 oz"}, p:3.50, b:["fav"] },
+      { id:"jamaica", sub:"aguas", img:"img/ai_jamaica.jpg", n:{en:"Jamaica",es:"Jamaica"}, d:{en:"Hibiscus flower, tart and cold · 16 / 32 oz",es:"Flor de jamaica, fría · 16 / 32 oz"}, p:3.50 },
+      { id:"tamarindo", sub:"aguas", img:"img/ai_tamarindo.jpg", n:{en:"Tamarindo",es:"Tamarindo"}, d:{en:"Sweet and sour tamarind · 16 / 32 oz",es:"Tamarindo agridulce · 16 / 32 oz"}, p:3.50 },
+      { id:"fresa", sub:"aguas", img:"img/pink.jpg", n:{en:"Fresas con crema",es:"Agua de fresa con crema"}, d:{en:"Strawberries and cream, blended · 16 / 32 oz",es:"Fresa licuada con crema · 16 / 32 oz"}, p:4.00, b:["new"] },
+      { id:"deldia", sub:"aguas", img:"img/pitchers.jpg", n:{en:"Agua del día",es:"Agua del día"}, d:{en:"Today's fruit: piña, sandía or melón · ask at the counter",es:"Fruta del día: piña, sandía o melón · pregunte en el mostrador"}, p:3.50 },
+      { id:"sodas", sub:"cold", img:"img/cooler.jpg", n:{en:"Mexican sodas",es:"Refrescos mexicanos"}, d:{en:"Glass-bottle Jarritos, Mexican Coke, Sidral",es:"Jarritos, Coca de vidrio, Sidral"}, p:3.00 },
+      { id:"cafe", sub:"hot", img:"img/ai_cafe.jpg", n:{en:"Café de olla",es:"Café de olla"}, d:{en:"Coffee brewed with cinnamon and piloncillo",es:"Café con canela y piloncillo"}, p:3.25 } ]}
+  ]
+};
+const T = {
+  en:{label:"EN",locale:"en-US",tagline:"Tacos al pastor, birria and aguas frescas on Macdonald Ave since 2009.",call:"Call",directions:"Directions",menu:"Menu",order:"Order",
+      open:"Open now · closes at ",closed:"Closed · opens ",today:"today",tomorrow:"tomorrow",at:" at ",
+      promos:["Taco Tuesday · $2.50 al pastor all day","Now on DoorDash, Uber Eats and Grubhub","Catering trays for 10 to 50 people","Open late Friday and Saturday"],
+      pickup:"Pickup",delivery:"Delivery",pickupTitle:"Order ahead for pickup",pickupBody:"Pick your food from the menu, send it to us, and skip the line.",
+      startOrder:"Start an order",callOrder:"Call it in",eta:"Usually ready in 15 to 20 minutes",
+      deliveryTitle:"Delivered to your door",deliveryBody:"Find us on the delivery app you already use. Menu and prices match the restaurant.",appSub:"Order on",
+      b1eye:"Every Tuesday",b1title:"Taco Tuesday",b1body:"Al pastor tacos all day, any amount. Dine in or pickup.",b1price:"$2.50 each",
+      b2eye:"Delivery",b2title:"Birria at your door",b2body:"Tacos travel in a sealed box and the consomé rides in its own cup, so nothing gets soggy.",
+      b3eye:"Friday & Saturday",b3title:"Open till 10",b3body:"Late tacos on Macdonald. The trompo keeps turning until close.",
+      menuKicker:"From the board",menuTitle:"Menu",menuNote:"Prices include tax. Ask about catering trays.",fav:"Most ordered",hot:"Spicy",new:"New",
+      aguas:"Aguas frescas",cold:"Cold drinks",hot2:"Hot",add:"Add",added:"Added",
+      hoursKicker:"Every day",hoursTitle:"Hours",closedDay:"Closed",todayTag:"Today",
+      days:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+      visitKicker:"Richmond, CA",visitTitle:"Find us",parking:"Free parking in the back lot.",openMaps:"Open in Google Maps",
+      phoneLabel:"Phone orders",copy:"Copy number",copied:"Copied",
+      reviewTitle:"Had a good meal?",reviewBody:"Tell people about it. A Google review takes 30 seconds and helps a family business more than you think.",reviewBtn:"Leave a Google review",
+      viewOrder:"View order",yourOrder:"Your order",total:"Total",nameLabel:"Name for the order",timeLabel:"Pickup time",textOrder:"Text order to us",copyOrder:"Copy order",keepBrowsing:"Keep browsing",
+      orderSmall:"We text back to confirm. Pay at pickup with card or cash.",orderFor:"Pickup order for",pickupAt:"Pickup at",asap:"as soon as possible",
+      footer:"© Taquería Tres Soles · Richmond, California",demo:"Sample site by PVG Production · demo business",
+      credits:"Photos: Jeswin Thomas, Joshua Soliz, Jason Leung, Snappr, Gaby Aziz, Charles Shaffer, Doris Morgan, Sergey Kotenev and We The Creators on Unsplash. Al pastor, birria, chile verde, horchata, jamaica, tamarindo and café de olla images are AI-generated samples."},
+  es:{label:"ES",locale:"es-MX",tagline:"Tacos al pastor, birria y aguas frescas en la Macdonald desde 2009.",call:"Llamar",directions:"Cómo llegar",menu:"Menú",order:"Ordenar",
+      open:"Abierto · cierra a las ",closed:"Cerrado · abre ",today:"hoy",tomorrow:"mañana",at:" a las ",
+      promos:["Martes de tacos · al pastor a $2.50 todo el día","Ya estamos en DoorDash, Uber Eats y Grubhub","Charolas para eventos de 10 a 50 personas","Abierto tarde viernes y sábado"],
+      pickup:"Para llevar",delivery:"A domicilio",pickupTitle:"Ordene antes y pase a recoger",pickupBody:"Escoja del menú, mándenos su orden y no haga fila.",
+      startOrder:"Empezar orden",callOrder:"Ordenar por teléfono",eta:"Normalmente lista en 15 a 20 minutos",
+      deliveryTitle:"Hasta su puerta",deliveryBody:"Búsquenos en la aplicación que ya usa. El menú y los precios son los mismos.",appSub:"Ordenar en",
+      b1eye:"Todos los martes",b1title:"Martes de tacos",b1body:"Tacos al pastor todo el día, los que quiera. Aquí o para llevar.",b1price:"$2.50 c/u",
+      b2eye:"A domicilio",b2title:"Birria hasta su casa",b2body:"Los tacos van en caja cerrada y el consomé en su propio vaso, para que no se aguaden.",
+      b3eye:"Viernes y sábado",b3title:"Abierto hasta las 10",b3body:"Tacos de noche en la Macdonald. El trompo sigue girando hasta cerrar.",
+      menuKicker:"Del pizarrón",menuTitle:"Menú",menuNote:"Precios con impuesto incluido. Pregunte por charolas para eventos.",fav:"El más pedido",hot:"Picante",new:"Nuevo",
+      aguas:"Aguas frescas",cold:"Refrescos",hot2:"Caliente",add:"Agregar",added:"Agregado",
+      hoursKicker:"Todos los días",hoursTitle:"Horario",closedDay:"Cerrado",todayTag:"Hoy",
+      days:["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"],
+      visitKicker:"Richmond, CA",visitTitle:"Visítenos",parking:"Estacionamiento gratis atrás.",openMaps:"Abrir en Google Maps",
+      phoneLabel:"Pedidos por teléfono",copy:"Copiar número",copied:"Copiado",
+      reviewTitle:"¿Le gustó la comida?",reviewBody:"Cuéntele a los demás. Una reseña en Google toma 30 segundos y ayuda mucho a un negocio familiar.",reviewBtn:"Dejar una reseña en Google",
+      viewOrder:"Ver orden",yourOrder:"Su orden",total:"Total",nameLabel:"Nombre para la orden",timeLabel:"Hora para recoger",textOrder:"Mandar orden por texto",copyOrder:"Copiar orden",keepBrowsing:"Seguir viendo",
+      orderSmall:"Le contestamos por texto para confirmar. Pague al recoger con tarjeta o efectivo.",orderFor:"Orden para llevar de",pickupAt:"Recoger a las",asap:"lo antes posible",
+      footer:"© Taquería Tres Soles · Richmond, California",demo:"Sitio de muestra por PVG Production · negocio de demostración",
+      credits:"Fotos: Jeswin Thomas, Joshua Soliz, Jason Leung, Snappr, Gaby Aziz, Charles Shaffer, Doris Morgan, Sergey Kotenev y We The Creators en Unsplash. Las imágenes de al pastor, birria, chile verde, horchata, jamaica, tamarindo y café de olla son muestras hechas con IA."}
+};
+/* To add a language: copy the "en" block above, give it a new key (for example vi, zh, tl), set its label and locale,
+   translate the text, and add that key to each menu item (n, d) and group (g). Anything left out falls back to English. */
+/* ---- end of business block ---- */
+
+(function(){  // Google rich results: Restaurant structured data
+  const dn=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"], pad=h=>String(h).padStart(2,"0")+":00";
+  const ld={"@context":"https://schema.org","@type":"Restaurant",name:BIZ.name,telephone:BIZ.phone,servesCuisine:"Mexican",priceRange:"$",
+    address:{"@type":"PostalAddress",streetAddress:BIZ.address.split(",")[0],addressLocality:BIZ.city,addressRegion:BIZ.region,addressCountry:"US"},
+    openingHoursSpecification:Object.entries(BIZ.hours).filter(([,h])=>h).map(([d,h])=>({"@type":"OpeningHoursSpecification",dayOfWeek:dn[d],opens:pad(h[0]),closes:pad(h[1])})),
+    hasMenu:{"@type":"Menu",hasMenuSection:BIZ.menu.map(g=>({"@type":"MenuSection",name:g.g.en,hasMenuItem:g.items.map(i=>({"@type":"MenuItem",name:i.n.en,description:i.d.en,offers:{"@type":"Offer",price:i.p.toFixed(2),priceCurrency:"USD"}}))}))}};
+  const s=document.createElement("script"); s.type="application/ld+json"; s.textContent=JSON.stringify(ld); document.head.appendChild(s);
+})();
+
+const $ = id => document.getElementById(id);
+const STAR='<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6L2.5 9.4l6.6-.8z"/></svg>';
+document.querySelector(".stars").innerHTML = STAR.repeat(5);
+const ITEMS = Object.fromEntries(BIZ.menu.flatMap(g => g.items).map(i => [i.id, i]));
+const money = v => "$" + v.toFixed(2);
+
+let lang = "en", tab = 0, mode = "pickup", promoI = 0;
+const cart = {};
+try { const s = localStorage.getItem("lang"); if (s && T[s]) lang = s; } catch (e) {}
+const tr = o => (o && (o[lang] ?? o.en)) ?? "";
+const Lx = () => Object.assign({}, T.en, T[lang]);
+
+function fmtHour(h){
+  const d = new Date(2026, 0, 1, h);
+  if (lang === "en") return new Intl.DateTimeFormat("en-US", {hour:"numeric"}).format(d).replace(/\s/g, "").toLowerCase();   // 9am
+  return new Intl.DateTimeFormat(Lx().locale, {hour:"numeric", minute:"2-digit", hourCycle:"h23"}).format(d);                  // 21:00
+}
+function nowLocal(){
+  const p = new Intl.DateTimeFormat("en-US",{timeZone:BIZ.tz,weekday:"short",hour:"numeric",minute:"numeric",hour12:false}).formatToParts(new Date());
+  const wd = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].indexOf(p.find(x=>x.type==="weekday").value);
+  const h = +p.find(x=>x.type==="hour").value % 24, m = +p.find(x=>x.type==="minute").value;
+  return {wd, t: h + m/60};
+}
+function renderPanel(animate){
+  const L = Lx(), g = BIZ.menu[tab], panel = $("panel"); let lastSub = null, html = "";
+  g.items.forEach(it => {
+    if (it.sub && it.sub !== lastSub){ html += `<p class="sub">${it.sub === "hot" ? L.hot2 : L[it.sub]}</p>`; lastSub = it.sub; }
+    html += `<article class="dish">
+      <div class="thumb"><img src="${it.img}" alt="${tr(it.n)}" loading="lazy"></div>
+      <div class="dish-body"><div class="dish-top"><b>${tr(it.n)}</b><span class="price">${money(it.p)}</span></div>
+      <p>${tr(it.d)}</p>
+      <div class="dish-foot"><div class="badges">${(it.b||[]).map(x=>`<span class="badge ${x}">${L[x]}</span>`).join("")}</div>
+      <button class="add" type="button" data-add="${it.id}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>${L.add}</button></div></div></article>`;
+  });
+  panel.innerHTML = html;
+  if (animate){ panel.classList.remove("enter"); void panel.offsetWidth; panel.classList.add("enter"); }
+}
+function renderTabs(){
+  const tabs = $("tabs"), ink = $("ink");
+  tabs.querySelectorAll(".tab").forEach(b => b.remove());
+  BIZ.menu.forEach((g, i) => {
+    const b = document.createElement("button"); b.className = "tab"; b.type = "button"; b.id = "tab-" + i;
+    b.setAttribute("role", "tab"); b.setAttribute("aria-selected", i === tab); b.textContent = tr(g.g);
+    b.addEventListener("click", () => { tab = i; renderTabs(); renderPanel(true); });
+    tabs.insertBefore(b, ink);
+  });
+  requestAnimationFrame(() => { const a = tabs.querySelector('[aria-selected="true"]'); if (!a) return; ink.style.width = a.offsetWidth + "px"; ink.style.transform = `translateX(${a.offsetLeft}px)`; });
+}
+function renderCart(){
+  const L = Lx(), ids = Object.keys(cart).filter(k => cart[k] > 0);
+  const n = ids.reduce((s, k) => s + cart[k], 0), tot = ids.reduce((s, k) => s + cart[k] * ITEMS[k].p, 0);
+  $("cart-count").textContent = n; $("cart-total").textContent = money(tot); $("sheet-total").textContent = money(tot);
+  $("cartbar").classList.toggle("show", n > 0);
+  $("lines").innerHTML = ids.map(k => `<div class="line"><span>${tr(ITEMS[k].n)}</span>
+      <span class="qty"><button type="button" data-dec="${k}" aria-label="−">−</button><b>${cart[k]}</b><button type="button" data-inc="${k}" aria-label="+">+</button></span>
+      <span class="price">${money(cart[k] * ITEMS[k].p)}</span></div>`).join("");
+  const name = $("o-name").value.trim(), time = $("o-time").value;
+  const txt = `${L.orderFor} ${name || "—"}\n` + ids.map(k => `${cart[k]} × ${tr(ITEMS[k].n)}`).join("\n") + `\n${L.total}: ${money(tot)}\n${L.pickupAt}: ${time || L.asap}`;
+  $("ordertext").textContent = txt;
+  $("sms").href = "sms:" + BIZ.phone + "?&body=" + encodeURIComponent(txt);
+  if (n === 0) closeSheet();
+}
+function renderPromo(first){
+  const box = $("promo"), msgs = Lx().promos, old = box.querySelector("p");
+  const p = document.createElement("p"); p.textContent = msgs[promoI % msgs.length];
+  if (first || !old){ box.innerHTML = ""; box.appendChild(p); return; }
+  p.className = "in"; box.appendChild(p); old.classList.add("out");
+  requestAnimationFrame(() => requestAnimationFrame(() => p.classList.remove("in")));
+  setTimeout(() => old.remove(), 600);
+}
+function render(){
+  const L = Lx();
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-t]").forEach(el => { const k = el.dataset.t; if (typeof L[k] === "string") el.textContent = L[k]; });
+  renderLang();
+  const names = BIZ.menu.flatMap(g => g.items.map(i => `<span>${tr(i.n)}</span>`)).join("");
+  $("ticker").innerHTML = names + names;
+  $("apps").innerHTML = BIZ.delivery.map(a => `<a class="app" href="${a.url}" target="_blank" rel="noopener"><small>${L.appSub}</small>${a.name}</a>`).join("");
+  renderTabs(); renderPanel(false); renderCart(); renderPromo(true);
+  const {wd, t} = nowLocal(), tb = $("hours"); tb.innerHTML = "";
+  [1,2,3,4,5,6,0].forEach(d => {
+    const h = BIZ.hours[d], tr = document.createElement("tr");
+    if (d === wd) tr.className = "today";
+    tr.innerHTML = `<td data-today="${L.todayTag}">${L.days[d]}</td><td>${h ? fmtHour(h[0]) + " – " + fmtHour(h[1]) : L.closedDay}</td>`;
+    tb.appendChild(tr);
+  });
+  const h = BIZ.hours[wd], chip = $("status"), st = $("status-text");
+  if (h && t >= h[0] && t < h[1]) { chip.classList.remove("closed"); st.textContent = L.open + fmtHour(h[1]); }
+  else {
+    chip.classList.add("closed"); let msg = "";
+    if (h && t < h[0]) msg = L.today + L.at + fmtHour(h[0]);
+    else { for (let k = 1; k <= 7; k++){ const d = (wd + k) % 7, hh = BIZ.hours[d]; if (hh){ msg = (k === 1 ? L.tomorrow : L.days[d]) + L.at + fmtHour(hh[0]); break; } } }
+    st.textContent = L.closed + msg;
+  }
+  $("addr").textContent = BIZ.address; $("phone-text").textContent = BIZ.phoneText;
+}
+/* links */
+const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(BIZ.mapsQuery);
+$("directions").href = $("maps").href = mapsUrl;
+$("call").href = $("call2").href = "tel:" + BIZ.phone;
+$("review-link").href = BIZ.reviewUrl;
+/* language */
+function setLang(l){
+  if (l === lang) return;
+  document.body.classList.add("swapping");
+  setTimeout(() => { lang = l; try { localStorage.setItem("lang", l); } catch (e) {} render(); document.body.classList.remove("swapping"); }, 180);
+}
+function renderLang(){
+  const box = $("lang"), ink = $("lang-ink");
+  if (!box.querySelector("button")) Object.keys(T).forEach(k => {
+    const b = document.createElement("button"); b.type = "button"; b.id = "lang-" + k; b.textContent = T[k].label || k.toUpperCase();
+    b.addEventListener("click", () => setLang(k)); box.appendChild(b); });
+  box.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.id === "lang-" + lang));
+  requestAnimationFrame(() => { const a = $("lang-" + lang); if (!a) return; ink.style.width = a.offsetWidth + "px"; ink.style.transform = `translateX(${a.offsetLeft}px)`; });
+}
+/* pickup / delivery */
+function setMode(m){
+  mode = m; $("seg").classList.toggle("del", m === "delivery");
+  $("seg-pickup").setAttribute("aria-selected", m === "pickup"); $("seg-delivery").setAttribute("aria-selected", m === "delivery");
+  $("pane-pickup").hidden = m !== "pickup"; $("pane-delivery").hidden = m !== "delivery";
+}
+$("seg-pickup").addEventListener("click", () => setMode("pickup"));
+$("seg-delivery").addEventListener("click", () => setMode("delivery"));
+$("b-delivery").addEventListener("click", () => setMode("delivery"));
+/* cart */
+$("panel").addEventListener("click", e => {
+  const b = e.target.closest("[data-add]"); if (!b) return;
+  const k = b.dataset.add; cart[k] = (cart[k] || 0) + 1; renderCart();
+  b.classList.add("added"); b.lastChild.textContent = Lx().added;
+  setTimeout(() => { b.classList.remove("added"); b.lastChild.textContent = Lx().add; }, 1100);
+  const bar = $("cartbar"); bar.classList.remove("bump"); void bar.offsetWidth; bar.classList.add("bump");
+});
+$("lines").addEventListener("click", e => {
+  const inc = e.target.closest("[data-inc]"), dec = e.target.closest("[data-dec]");
+  if (inc) cart[inc.dataset.inc]++; if (dec) cart[dec.dataset.dec]--; renderCart();
+});
+["o-name","o-time"].forEach(id => $(id).addEventListener("input", renderCart));
+function openSheet(){ $("sheet").classList.add("open"); $("sheet-bg").classList.add("open"); }
+function closeSheet(){ $("sheet").classList.remove("open"); $("sheet-bg").classList.remove("open"); }
+$("cart-open").addEventListener("click", openSheet);
+$("sheet-close").addEventListener("click", closeSheet);
+$("sheet-bg").addEventListener("click", closeSheet);
+addEventListener("keydown", e => { if (e.key === "Escape") closeSheet(); });
+function copyText(text, btn, done){
+  navigator.clipboard?.writeText(text).then(() => { btn.textContent = done; setTimeout(render, 1500); })
+    .catch(() => { const r = document.createRange(); r.selectNodeContents($("ordertext")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); });
+}
+$("copy-order").addEventListener("click", e => copyText($("ordertext").textContent, e.currentTarget, Lx().copied));
+$("copy").addEventListener("click", e => copyText(BIZ.phoneText, e.currentTarget, Lx().copied));
+/* promo rotation, sticky bar, reveal */
+setInterval(() => { promoI++; renderPromo(false); }, 3800);
+const bar = $("bar"), hero = $("hero");
+addEventListener("scroll", () => bar.classList.toggle("scrolled", hero.getBoundingClientRect().bottom < 60), {passive:true});
+if ("IntersectionObserver" in window){
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.remove("below"); if (e.target.querySelector("#review")) $("review").classList.add("seen"); io.unobserve(e.target); } }), {threshold:.12});
+  document.querySelectorAll(".reveal").forEach(el => { if (el.getBoundingClientRect().top > innerHeight) { el.classList.add("below"); io.observe(el); } else if (el.querySelector("#review")) $("review").classList.add("seen"); });
+}
+addEventListener("resize", renderTabs);
+render(); setInterval(() => { const o = document.activeElement; if (!o || !$("sheet").contains(o)) render(); }, 60000);
+</script>
+</body>
+</html>

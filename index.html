@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>PVG Production Websites</title>
+<meta name="description" content="Bilingual, phone-first websites for local businesses that sell on Instagram and Facebook. Richmond, CA.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Work+Sans:wght@400;500;600;700&display=swap">
+<style>
+html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}
+
+/* Layout: a small studio's work sheet. Statement headline, two phone-screen case studies, the review card,
+   what's included, prices, four-step process, FAQ, and a reply-to-start close. */
+:root{
+  /* palette: print-shop ink on warm paper, one cobalt accent, a soft cobalt tint for panels */
+  --bg:#F5F3EE; --surface:#FFFFFF; --fg:#16181D; --muted:#5C606A; --line:#E2DED5;
+  --ink:#16181D; --on-ink:#F5F3EE; --cobalt:#2F55D4; --on-cobalt:#FFFFFF; --tint:#E6ECFB;
+  --display:"Archivo Black","Arial Black",Impact,sans-serif;
+  --body:"Work Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111318; --surface:#181B22; --fg:#EEF0F4; --muted:#A2A8B4; --line:#2A2E38;
+  --ink:#0B0D11; --on-ink:#EEF0F4; --cobalt:#7C97F2; --on-cobalt:#0B1230; --tint:#1C2440; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111318; --surface:#181B22; --fg:#EEF0F4; --muted:#A2A8B4; --line:#2A2E38;
+  --ink:#0B0D11; --on-ink:#EEF0F4; --cobalt:#7C97F2; --on-cobalt:#0B1230; --tint:#1C2440; color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.55;overflow-x:hidden}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+img{display:block;max-width:100%}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--cobalt);outline-offset:3px;border-radius:6px}
+
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:12px}
+.logo{font:400 18px var(--display);letter-spacing:.02em;text-decoration:none}
+.logo span{color:var(--cobalt)}
+.right{display:flex;align-items:center;gap:10px}
+.nav{display:none;gap:18px;font:600 15px var(--body)}
+.nav a{text-decoration:none;color:var(--muted)} .nav a:hover{color:var(--fg)}
+@media (min-width:820px){.nav{display:flex}}
+.lang{position:relative;display:flex;border:2px solid var(--fg);border-radius:999px;overflow:hidden}
+.lang-ink{position:absolute;top:0;bottom:0;left:0;background:var(--fg);transition:transform .35s var(--ease),width .35s var(--ease)}
+.lang button{position:relative;font:700 12px var(--body);letter-spacing:.06em;padding:6px 12px;border:0;background:transparent;color:var(--fg);cursor:pointer;transition:color .35s}
+.lang button[aria-pressed="true"]{color:var(--bg)}
+[data-t]{transition:opacity .18s} body.swapping [data-t]{opacity:0}
+
+.hero{padding-block:56px 30px}
+.eyebrow{font:700 13px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--cobalt);margin:0 0 14px}
+h1{font:400 clamp(40px,9vw,88px)/.98 var(--display);margin:0;letter-spacing:-.01em;text-wrap:balance;max-width:16ch}
+h1 mark{background:none;color:var(--cobalt)}
+.sub{font-size:clamp(18px,2.4vw,21px);color:var(--muted);max-width:46ch;margin:18px 0 0}
+.ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 20px;border-radius:999px;text-decoration:none;font:700 16px var(--body);border:2px solid var(--fg);transition:transform .2s var(--ease)}
+.btn:active{transform:scale(.97)}
+.btn.fill{background:var(--fg);color:var(--bg)}
+.btn.cob{background:var(--cobalt);border-color:var(--cobalt);color:var(--on-cobalt)}
+.proof{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:26px;font:600 14px var(--body);color:var(--muted)}
+.proof span{display:inline-flex;align-items:center;gap:6px}
+.proof span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--cobalt)}
+
+section{padding-block:56px 10px}
+h2{font:400 clamp(30px,6vw,52px)/1.02 var(--display);margin:0 0 10px;text-wrap:balance;max-width:20ch}
+.lede{color:var(--muted);margin:0 0 26px;max-width:58ch}
+
+.case{display:grid;gap:22px;align-items:center;padding:22px;border-radius:30px;background:var(--surface);border:1px solid var(--line);margin-bottom:18px}
+@media (min-width:860px){.case{grid-template-columns:1.05fr 1fr;padding:34px}.case.flip .shots{order:2}}
+.shots{display:flex;gap:12px;justify-content:center;align-items:flex-end;background:var(--tint);border-radius:22px;padding:22px 12px 0;overflow:hidden}
+.shots img{width:min(46%,230px);filter:drop-shadow(0 18px 24px rgba(0,0,0,.18))}
+.shots img:nth-child(2){transform:translateY(18px)}
+.case .tag{display:inline-block;font:700 12px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--cobalt);margin-bottom:8px}
+.case h3{font:400 clamp(26px,4vw,38px)/1.05 var(--display);margin:0 0 8px}
+.case p{color:var(--muted);margin:0 0 14px}
+.feat{list-style:none;margin:0 0 18px;padding:0;display:grid;gap:8px}
+.feat li{display:flex;gap:10px;align-items:flex-start}
+.feat li::before{content:"";flex:none;width:20px;height:20px;margin-top:3px;border-radius:6px;background:var(--cobalt) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.4'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E") center/12px no-repeat}
+.demo-note{font-size:13px;color:var(--muted);margin-top:10px}
+
+.cardrow{display:grid;gap:18px;align-items:center;padding:22px;border-radius:30px;background:var(--ink);color:var(--on-ink)}
+@media (min-width:860px){.cardrow{grid-template-columns:1fr 1.1fr;padding:34px}}
+.cardrow h3{font:400 clamp(26px,4vw,38px)/1.05 var(--display);margin:0 0 8px}
+.cardrow p{margin:0 0 10px;opacity:.82}
+.cardimgs{display:flex;gap:14px;align-items:center;justify-content:center}
+.cardimgs img:first-child{width:58%;border-radius:14px;transform:rotate(-4deg);box-shadow:0 18px 30px rgba(0,0,0,.35)}
+.cardimgs img:last-child{width:34%;border-radius:10px;transform:rotate(3deg);box-shadow:0 18px 30px rgba(0,0,0,.35)}
+
+.inc{display:grid;gap:12px}
+@media (min-width:760px){.inc{grid-template-columns:repeat(3,1fr)}}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:20px}
+.box h3{margin:0 0 10px;font:700 19px var(--body)}
+.box ul{margin:0;padding-left:18px;color:var(--muted);display:grid;gap:6px;font-size:16px}
+
+.prices{display:grid;gap:12px}
+@media (min-width:760px){.prices{grid-template-columns:1fr 1fr}}
+.plan{border-radius:26px;padding:24px;border:2px solid var(--fg);background:var(--surface);display:flex;flex-direction:column;gap:6px}
+.plan.hot{background:var(--cobalt);border-color:var(--cobalt);color:var(--on-cobalt)}
+.plan .name{font:700 13px var(--body);letter-spacing:.14em;text-transform:uppercase}
+.plan .amt{font:400 clamp(40px,7vw,58px)/1 var(--display);margin-top:6px}
+.plan .mo{font:600 16px var(--body);opacity:.85}
+.plan p{margin:8px 0 0;opacity:.85}
+.extras{margin-top:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;min-width:420px}
+td{padding:12px 4px;border-bottom:1px solid var(--line)}
+td:last-child{text-align:right;font-weight:700;white-space:nowrap}
+
+.steps{display:grid;gap:12px;counter-reset:s}
+@media (min-width:760px){.steps{grid-template-columns:repeat(4,1fr)}}
+.step{counter-increment:s;padding:20px;border-radius:22px;background:var(--tint)}
+.step::before{content:counter(s);display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--fg);color:var(--bg);font:400 18px var(--display);margin-bottom:10px}
+.step h3{margin:0 0 6px;font:700 18px var(--body)} .step p{margin:0;color:var(--muted);font-size:15px}
+
+details{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin-bottom:10px}
+summary{cursor:pointer;font:700 17px var(--body);list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::after{content:"+";font:400 22px var(--display);line-height:1;transition:transform .3s var(--ease)}
+details[open] summary::after{transform:rotate(45deg)}
+details p{margin:8px 0 0;color:var(--muted)}
+
+.close{margin-block:56px 40px;border-radius:32px;background:var(--ink);color:var(--on-ink);padding:34px 24px}
+.close h2{color:var(--on-ink);max-width:18ch}
+.close p{opacity:.82;max-width:52ch}
+.close .btn{border-color:var(--on-ink);color:var(--on-ink)}
+.close .btn.cob{border-color:var(--cobalt);color:var(--on-cobalt)}
+footer{padding-block:10px 50px;font-size:14px;color:var(--muted)}
+.reveal{transition:transform .8s var(--ease)} .reveal.below{transform:translateY(26px)}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.hero > *{animation:fade .8s var(--ease) both}.hero > *:nth-child(2){animation-delay:.08s}.hero > *:nth-child(3){animation-delay:.16s}.hero > *:nth-child(4){animation-delay:.24s}.hero > *:nth-child(5){animation-delay:.32s}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.reveal.below{transform:none}}
+</style>
+</head>
+<body>
+
+<header class="bar"><div class="wrap">
+  <a class="logo" href="#top">PVG <span>Production</span></a>
+  <div class="right">
+    <nav class="nav"><a href="#work" data-t="navWork"></a><a href="#prices" data-t="navPrices"></a><a href="#how" data-t="navHow"></a></nav>
+    <div class="lang" id="lang" role="group" aria-label="Language"><span class="lang-ink" id="lang-ink"></span></div>
+  </div>
+</div></header>
+
+<main class="wrap" id="top">
+  <div class="hero">
+    <p class="eyebrow" data-t="eyebrow"></p>
+    <h1 data-t-html="h1"></h1>
+    <p class="sub" data-t="sub"></p>
+    <div class="ctas"><a class="btn fill" href="#work" data-t="ctaWork"></a><a class="btn" href="#prices" data-t="ctaPrices"></a></div>
+    <div class="proof"><span data-t="p1"></span><span data-t="p2"></span><span data-t="p3"></span><span data-t="p4"></span></div>
+  </div>
+
+  <section id="work" class="reveal">
+    <p class="eyebrow" data-t="workK"></p>
+    <h2 data-t="workH"></h2>
+    <p class="lede" data-t="workP"></p>
+
+    <article class="case">
+      <div class="shots"><img src="img/bake_1_phone.png" alt="" loading="lazy"><img src="img/bake_2_phone.png" alt="" loading="lazy"></div>
+      <div>
+        <span class="tag" data-t="c1tag"></span>
+        <h3>Dulce Esquina Bakery</h3>
+        <p data-t="c1p"></p>
+        <ul class="feat" id="c1feat"></ul>
+        <a class="btn cob" href="/demos/bakery/" target="_blank" rel="noopener" data-t="openDemo"></a>
+        <p class="demo-note" data-t="demoNote"></p>
+      </div>
+    </article>
+
+    <article class="case flip">
+      <div class="shots"><img src="img/taco_1_phone.png" alt="" loading="lazy"><img src="img/taco_2_phone.png" alt="" loading="lazy"></div>
+      <div>
+        <span class="tag" data-t="c2tag"></span>
+        <h3>Taquería Tres Soles</h3>
+        <p data-t="c2p"></p>
+        <ul class="feat" id="c2feat"></ul>
+        <a class="btn cob" href="/demos/taqueria/" target="_blank" rel="noopener" data-t="openDemo"></a>
+        <p class="demo-note" data-t="demoNote"></p>
+      </div>
+    </article>
+
+    <div class="cardrow reveal">
+      <div class="cardimgs"><img src="img/card_front.png" alt="" loading="lazy"><img src="img/sign.png" alt="" loading="lazy"></div>
+      <div><span class="tag" data-t="c3tag" style="color:var(--cobalt);font:700 12px var(--body);letter-spacing:.12em;text-transform:uppercase"></span><h3 data-t="c3h"></h3><p data-t="c3p"></p><p data-t="c3p2"></p></div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <p class="eyebrow" data-t="incK"></p>
+    <h2 data-t="incH"></h2>
+    <div class="inc" id="inc"></div>
+  </section>
+
+  <section id="prices" class="reveal">
+    <p class="eyebrow" data-t="priceK"></p>
+    <h2 data-t="priceH"></h2>
+    <p class="lede" data-t="priceP"></p>
+    <div class="prices">
+      <div class="plan hot"><span class="name" data-t="pl1"></span><span class="amt">$400</span><span class="mo" data-t="pl1mo"></span><p data-t="pl1p"></p></div>
+      <div class="plan"><span class="name" data-t="pl2"></span><span class="amt">$750</span><span class="mo" data-t="pl2mo"></span><p data-t="pl2p"></p></div>
+    </div>
+    <div class="extras"><table id="extras"></table></div>
+  </section>
+
+  <section id="how" class="reveal">
+    <p class="eyebrow" data-t="howK"></p>
+    <h2 data-t="howH"></h2>
+    <div class="steps" id="steps"></div>
+  </section>
+
+  <section class="reveal">
+    <p class="eyebrow" data-t="faqK"></p>
+    <h2 data-t="faqH"></h2>
+    <div id="faq"></div>
+  </section>
+
+  <div class="close reveal">
+    <h2 data-t="closeH"></h2>
+    <p data-t="closeP"></p>
+    <div class="ctas"><a class="btn cob" href="#work" data-t="closeBtn"></a></div>
+  </div>
+  <footer data-t="footer"></footer>
+</main>
+
+<script>
+const T = {
+  en:{label:"EN",navWork:"Work",navPrices:"Prices",navHow:"How it works",
+    eyebrow:"Websites for local businesses · Richmond, CA",
+    h1:"Your Instagram is the storefront. <mark>Give it a front door.</mark>",
+    sub:"A one-page website that takes orders, answers the same questions you get in DMs, and works in English and your customers' language. I build a free sample with your real menu before you pay anything.",
+    ctaWork:"See the work",ctaPrices:"What it costs",
+    p1:"Ready in about a week",p2:"Any language",p3:"Made for phones",p4:"Your domain, in your name",
+    workK:"Sample work",workH:"Two businesses, two different jobs",workP:"Both are demo businesses I built to show what's possible. Open them on your phone and try them: tap things, switch the language, build an order.",
+    c1tag:"Home bakery that sells on Instagram",c1p:"For a baker who takes orders by DM. Customers pick a real cake design, size and flavor, and the site writes the order message for them.",
+    c1feat:["Cake builder with real photos and a live price estimate","Weekly menu with one-tap requests","Next market day up top, with directions","Menu button with every link: order, text, Instagram, deposit, reviews"],
+    c2tag:"Neighborhood taquería",c2p:"For a restaurant with walk-in, pickup and delivery customers. The page knows when it's open and sends pickup orders by text.",
+    c2feat:["Menu with photos, tabs and add-to-order","Pickup or delivery switch with links to the delivery apps","Live open or closed status and today's hours","Promo strip and banners for specials like Taco Tuesday"],
+    openDemo:"Open the live demo",demoNote:"Demo business. Photos from Unsplash, some menu photos are AI samples.",
+    c3tag:"Add-on",c3h:"Tap-to-review card",c3p:"Customers tap their phone on the card at checkout and your Google review page opens. A QR code covers phones that don't tap.",c3p2:"Included free with every website. Google's rules say to ask every customer, not just the happy ones, so the card goes to everyone.",
+    incK:"What you get",incH:"What comes with the website",
+    inc:[["Included in setup",["One-page site in 2 languages","Your menu or services with photos","Order, call, text and directions buttons","Google-friendly setup for hours, address and menu","Your domain connected and the site live","Review card and counter sign","2 rounds of changes before launch"]],
+         ["Monthly plan",["Hosting and keeping the site online","Up to 4 small updates a month","Hours, prices, menu items, photos, promo text","Done within 2 business days"]],
+         ["Costs extra",["Extra language: $75 each","Small design change: $35","New section: $75 to $150","Full redesign: quoted","Photo shoot or online payments: quoted"]]],
+    priceK:"Prices",priceH:"Simple prices, no contract",priceP:"Domains cost about $10 to $20 a year and are registered in your name, so the site is always yours.",
+    pl1:"Founding client · first 3 businesses",pl1mo:"setup + $25/month",pl1p:"Same website, in exchange for letting me share it as an example and a short review.",
+    pl2:"Standard",pl2mo:"setup + $35/month",pl2p:"Two languages, review card included, 2 rounds of changes.",
+    extras:[["Extra language (3rd, 4th…)","$75 each"],["Small design change after launch","$35"],["New section (catering form, gallery, specials)","$75–150"],["Extra review cards","$25 · 3 for $60"],["Counter sign with tap tag","$45"]],
+    howK:"How it works",howH:"From DM to live site in about a week",
+    steps:[["Free sample","Send me your Instagram or menu. I build a sample with your real items."],["Two rounds of changes","Tell me what to change. Send everything together each round."],["Go live","We connect your domain and the site goes live. You get your review card."],["Stay updated","Text me new hours, prices or items. The monthly plan covers it."]],
+    faqK:"Questions",faqH:"Before you ask",
+    faq:[["Do I stop using Instagram?","No. The site links to your Instagram and makes it easier to order from it. Put the site in your bio."],["What if I don't like the sample?","Then you don't pay anything. The sample is free."],["Who owns the website?","You do. The domain is registered in your name."],["Can customers pay online?","Orders come to you by text and customers pay you the way they already do. Online payments through Square or Clover can be added; that's quoted separately."],["Which languages?","Any. English plus the language your customers speak is included. Have someone who speaks it read it before launch."]],
+    closeH:"Want to see yours?",closeP:"Reply to the message this link came in, with your Instagram or menu. I'll send a free sample site within a few days.",closeBtn:"See the work again",
+    footer:"PVG Production · Richmond, California"},
+  es:{label:"ES",navWork:"Trabajo",navPrices:"Precios",navHow:"Cómo funciona",
+    eyebrow:"Sitios web para negocios locales · Richmond, CA",
+    h1:"Su Instagram es la tienda. <mark>Póngale una puerta.</mark>",
+    sub:"Un sitio de una página que recibe pedidos, contesta las mismas preguntas que le llegan por mensaje y funciona en inglés y en el idioma de sus clientes. Le hago una muestra gratis con su menú real antes de que pague algo.",
+    ctaWork:"Ver el trabajo",ctaPrices:"Cuánto cuesta",
+    p1:"Listo en una semana",p2:"Cualquier idioma",p3:"Hecho para celulares",p4:"Su dominio, a su nombre",
+    workK:"Trabajo de muestra",workH:"Dos negocios, dos trabajos distintos",workP:"Los dos son negocios de demostración que hice para mostrar lo que se puede hacer. Ábralos en su celular y pruébelos: toque, cambie el idioma, arme un pedido.",
+    c1tag:"Panadería casera que vende en Instagram",c1p:"Para quien recibe pedidos por mensaje. El cliente escoge un diseño de pastel real, tamaño y sabor, y el sitio le escribe el mensaje del pedido.",
+    c1feat:["Armador de pasteles con fotos reales y precio aproximado","Menú de la semana con pedidos de un toque","El próximo día de mercado arriba, con cómo llegar","Botón de menú con todos los enlaces: ordenar, texto, Instagram, depósito, reseñas"],
+    c2tag:"Taquería de barrio",c2p:"Para un restaurante con clientes que llegan, recogen o piden a domicilio. La página sabe cuándo está abierto y manda pedidos por texto.",
+    c2feat:["Menú con fotos, pestañas y botón para agregar","Para llevar o a domicilio con enlaces a las aplicaciones","Abierto o cerrado en vivo y el horario de hoy","Franja y banners para promociones como Martes de tacos"],
+    openDemo:"Abrir la demostración",demoNote:"Negocio de demostración. Fotos de Unsplash; algunas fotos del menú son muestras hechas con IA.",
+    c3tag:"Extra",c3h:"Tarjeta para reseñas",c3p:"El cliente acerca su celular a la tarjeta al pagar y se abre su página de reseñas de Google. Un código QR funciona en los que no la leen.",c3p2:"Incluida gratis con cada sitio. Las reglas de Google piden invitar a todos los clientes, no solo a los contentos, así que la tarjeta es para todos.",
+    incK:"Qué recibe",incH:"Qué incluye el sitio web",
+    inc:[["Incluido en la instalación",["Sitio de una página en 2 idiomas","Su menú o servicios con fotos","Botones para ordenar, llamar, texto y cómo llegar","Configuración para que Google lea horario, dirección y menú","Su dominio conectado y el sitio publicado","Tarjeta para reseñas y letrero","2 rondas de cambios antes de publicar"]],
+         ["Plan mensual",["Hospedaje y mantener el sitio en línea","Hasta 4 cambios pequeños al mes","Horario, precios, platillos, fotos, promociones","Listos en 2 días hábiles"]],
+         ["Cuesta extra",["Idioma adicional: $75 c/u","Cambio pequeño de diseño: $35","Sección nueva: $75 a $150","Rediseño completo: cotización","Sesión de fotos o pagos en línea: cotización"]]],
+    priceK:"Precios",priceH:"Precios sencillos, sin contrato",priceP:"El dominio cuesta unos $10 a $20 al año y se registra a su nombre, así que el sitio siempre es suyo.",
+    pl1:"Cliente fundador · primeros 3 negocios",pl1mo:"instalación + $25/mes",pl1p:"El mismo sitio, a cambio de dejarme mostrarlo como ejemplo y una reseña corta.",
+    pl2:"Regular",pl2mo:"instalación + $35/mes",pl2p:"Dos idiomas, tarjeta para reseñas incluida, 2 rondas de cambios.",
+    extras:[["Idioma adicional (3o, 4o…)","$75 c/u"],["Cambio pequeño de diseño después de publicar","$35"],["Sección nueva (eventos, galería, especiales)","$75–150"],["Tarjetas extra para reseñas","$25 · 3 por $60"],["Letrero con etiqueta para tocar","$45"]],
+    howK:"Cómo funciona",howH:"Del mensaje al sitio publicado en una semana",
+    steps:[["Muestra gratis","Mándeme su Instagram o menú. Le hago una muestra con sus productos reales."],["Dos rondas de cambios","Dígame qué cambiar. Mande todo junto en cada ronda."],["Publicar","Conectamos su dominio y el sitio queda en línea. Recibe su tarjeta para reseñas."],["Mantenerlo al día","Mándeme por texto horarios, precios o productos nuevos. El plan mensual lo cubre."]],
+    faqK:"Preguntas",faqH:"Antes de que pregunte",
+    faq:[["¿Dejo de usar Instagram?","No. El sitio enlaza su Instagram y hace más fácil ordenar. Ponga el sitio en su bio."],["¿Y si no me gusta la muestra?","Entonces no paga nada. La muestra es gratis."],["¿De quién es el sitio?","Suyo. El dominio se registra a su nombre."],["¿Pueden pagar en línea?","Los pedidos le llegan por texto y sus clientes le pagan como ya lo hacen. Se pueden agregar pagos en línea con Square o Clover; eso se cotiza aparte."],["¿Qué idiomas?","Cualquiera. Está incluido el inglés y el idioma de sus clientes. Que alguien que lo hable lo revise antes de publicar."]],
+    closeH:"¿Quiere ver el suyo?",closeP:"Conteste el mensaje en el que le llegó este enlace con su Instagram o menú. Le mando una muestra gratis en unos días.",closeBtn:"Ver el trabajo otra vez",
+    footer:"PVG Production · Richmond, California"}
+};
+const $ = id => document.getElementById(id);
+let lang = (navigator.language || "en").toLowerCase().startsWith("es") ? "es" : "en";
+try { const s = localStorage.getItem("lang-pvg"); if (s && T[s]) lang = s; } catch (e) {}
+const L = () => Object.assign({}, T.en, T[lang]);
+function renderLang(){
+  const box = $("lang"), ink = $("lang-ink");
+  if (!box.querySelector("button")) Object.keys(T).forEach(k => { const b = document.createElement("button"); b.type = "button"; b.id = "lang-" + k; b.textContent = T[k].label; b.addEventListener("click", () => setLang(k)); box.appendChild(b); });
+  box.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.id === "lang-" + lang));
+  requestAnimationFrame(() => { const a = $("lang-" + lang); ink.style.width = a.offsetWidth + "px"; ink.style.transform = `translateX(${a.offsetLeft}px)`; });
+}
+function setLang(k){ if (k === lang) return; document.body.classList.add("swapping"); setTimeout(() => { lang = k; try { localStorage.setItem("lang-pvg", k); } catch (e) {} render(); document.body.classList.remove("swapping"); }, 180); }
+function render(){
+  const X = L(); document.documentElement.lang = lang;
+  document.querySelectorAll("[data-t]").forEach(el => { const v = X[el.dataset.t]; if (typeof v === "string") el.textContent = v; });
+  document.querySelectorAll("[data-t-html]").forEach(el => el.innerHTML = X[el.dataset.tHtml]);
+  $("c1feat").innerHTML = X.c1feat.map(f => `<li>${f}</li>`).join("");
+  $("c2feat").innerHTML = X.c2feat.map(f => `<li>${f}</li>`).join("");
+  $("inc").innerHTML = X.inc.map(([h, items]) => `<div class="box"><h3>${h}</h3><ul>${items.map(i => `<li>${i}</li>`).join("")}</ul></div>`).join("");
+  $("extras").innerHTML = X.extras.map(([a, b]) => `<tr><td>${a}</td><td>${b}</td></tr>`).join("");
+  $("steps").innerHTML = X.steps.map(([h, p]) => `<div class="step"><h3>${h}</h3><p>${p}</p></div>`).join("");
+  $("faq").innerHTML = X.faq.map(([q, a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join("");
+  renderLang();
+}
+if ("IntersectionObserver" in window){
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.remove("below"); io.unobserve(e.target); } }), {threshold:.08});
+  document.querySelectorAll(".reveal").forEach(el => { if (el.getBoundingClientRect().top > innerHeight){ el.classList.add("below"); io.observe(el); } });
+}
+addEventListener("resize", renderLang);
+render();
+</script>
+</body>
+</html>
